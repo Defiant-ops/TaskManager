@@ -3,6 +3,9 @@ venv/
 ENV/
 env/
 *.pyc
+*.env
+.env
+.env.*
 __pycache__/
 
 # VS Code settings

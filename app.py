@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify, send_from_directory
+from flask.cli import load_dotenv
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import os
 
 app = Flask(__name__)
 
-app.config["MONGO_URI"] = os.getenv("MONGO_URI", "mongodb+srv://sinhaanurag0609_db_user:FTQPx0td41LuBWcT@cluster0.sjm9vgh.mongodb.net/taskmanager?retryWrites=true&w=majority")
+load_dotenv()  # Load environment variables from .env file
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 
 mongo = PyMongo(app)
 tasks_collection = mongo.db.tasks
