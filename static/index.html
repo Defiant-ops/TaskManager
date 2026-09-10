@@ -2,1148 +2,360 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Task Manager</title>
 
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #0f1117;
-            color: #f5f5f5;
-            min-height: 100vh;
-        }
-
-
-        .container {
-            width: 90%;
-            max-width: 1100px;
-            margin: 40px auto;
-        }
-
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            gap: 20px;
-        }
-
-
-        .header h1 {
-            font-size: 32px;
-        }
-
-
-        .header p {
-            color: #9ca3af;
-            margin-top: 6px;
-        }
-
-
-        /* =========================
-           NOTIFICATION AREA
-        ========================= */
-
-        .notification-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-
-        #notificationStatus {
-            color: #9ca3af;
-            font-size: 13px;
-        }
-
-
-        .notification-btn {
-            background: #2563eb;
-            color: white;
-        }
-
-
-        .notification-btn:hover {
-            background: #1d4ed8;
-        }
-
-
-        /* =========================
-           STATISTICS
-        ========================= */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-
-        .stat-card {
-            background: #181b23;
-            border: 1px solid #292d38;
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-
-        .stat-card h3 {
-            color: #9ca3af;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-
-        .stat-card strong {
-            font-size: 28px;
-        }
-
-
-        /* =========================
-           TASK FORM
-        ========================= */
-
-        .task-form {
-            background: #181b23;
-            border: 1px solid #292d38;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
-
-        .task-form h2 {
-            margin-bottom: 20px;
-        }
-
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-
-        label {
-            display: block;
-            font-size: 14px;
-            color: #cbd5e1;
-            margin-bottom: 7px;
-        }
-
-
-        input,
-        textarea,
-        select {
-
-            width: 100%;
-
-            background: #10131a;
-
-            border: 1px solid #303542;
-
-            color: #f5f5f5;
-
-            border-radius: 7px;
-
-            padding: 12px;
-
-            outline: none;
-
-            font-size: 14px;
-        }
-
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #2563eb;
-        }
-
-
-        textarea {
-            resize: vertical;
-            min-height: 90px;
-        }
-
-
-        input[type="datetime-local"] {
-            color-scheme: dark;
-        }
-
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-
-        .add-btn {
-
-            width: 100%;
-
-            background: #2563eb;
-
-            color: white;
-
-            font-weight: bold;
-
-            margin-top: 5px;
-        }
-
-
-        .add-btn:hover {
-            background: #1d4ed8;
-        }
-
-
-        /* =========================
-           TIMEZONE
-        ========================= */
-
-        .timezone-info {
-
-            background: #13161d;
-
-            border: 1px solid #292d38;
-
-            border-radius: 7px;
-
-            padding: 10px 12px;
-
-            margin-top: 5px;
-
-            margin-bottom: 15px;
-
-            color: #9ca3af;
-
-            font-size: 12px;
-        }
-
-
-        .timezone-info strong {
-            color: #cbd5e1;
-        }
-
-
-        /* =========================
-           FILTERS
-        ========================= */
-
-        .filter-bar {
-
-            display: flex;
-
-            gap: 10px;
-
-            margin-bottom: 20px;
-
-            flex-wrap: wrap;
-        }
-
-
-        .filter-btn {
-
-            background: #181b23;
-
-            color: #cbd5e1;
-
-            border: 1px solid #303542;
-        }
-
-
-        .filter-btn:hover {
-            background: #222631;
-        }
-
-
-        .filter-btn.active {
-
-            background: #2563eb;
-
-            color: white;
-
-            border-color: #2563eb;
-        }
-
-
-        /* =========================
-           TASK LIST
-        ========================= */
-
-        #taskList {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 15px;
-        }
-
-
-        .task-card {
-
-            background: #181b23;
-
-            border: 1px solid #292d38;
-
-            border-radius: 10px;
-
-            padding: 20px;
-        }
-
-
-        .task-card.completed {
-            opacity: 0.6;
-        }
-
-
-        .task-card.completed .task-title {
-
-            text-decoration: line-through;
-
-            color: #9ca3af;
-        }
-
-
-        .task-top {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: flex-start;
-
-            gap: 15px;
-        }
-
-
-        .task-title {
-
-            font-size: 19px;
-
-            font-weight: bold;
-
-            margin-bottom: 8px;
-        }
-
-
-        .task-description {
-
-            color: #9ca3af;
-
-            line-height: 1.5;
-
-            margin-bottom: 15px;
-
-            white-space: pre-wrap;
-        }
-
-
-        .task-meta {
-
-            display: flex;
-
-            gap: 10px;
-
-            flex-wrap: wrap;
-
-            margin-bottom: 15px;
-        }
-
-
-        .badge {
-
-            background: #222631;
-
-            color: #cbd5e1;
-
-            border-radius: 6px;
-
-            padding: 6px 9px;
-
-            font-size: 12px;
-        }
-
-
-        .badge.due {
-            color: #60a5fa;
-        }
-
-
-        .badge.reminder {
-            color: #fbbf24;
-        }
-
-
-        .badge.overdue {
-
-            color: #f87171;
-
-            background: #321d21;
-        }
-
-
-        .badge.done {
-
-            color: #4ade80;
-
-            background: #172b20;
-        }
-
-
-        .task-actions {
-
-            display: flex;
-
-            gap: 8px;
-
-            flex-wrap: wrap;
-        }
-
-
-        button {
-
-            border: none;
-
-            cursor: pointer;
-
-            border-radius: 7px;
-
-            padding: 10px 15px;
-
-            font-size: 14px;
-        }
-
-
-        .done-btn {
-
-            background: #166534;
-
-            color: white;
-        }
-
-
-        .edit-btn {
-
-            background: #374151;
-
-            color: white;
-        }
-
-
-        .delete-btn {
-
-            background: #991b1b;
-
-            color: white;
-        }
-
-
-        .done-btn:hover {
-            background: #15803d;
-        }
-
-
-        .edit-btn:hover {
-            background: #4b5563;
-        }
-
-
-        .delete-btn:hover {
-            background: #b91c1c;
-        }
-
-
-        /* =========================
-           EMPTY STATE
-        ========================= */
-
-        .empty-state {
-
-            background: #181b23;
-
-            border: 1px dashed #303542;
-
-            border-radius: 10px;
-
-            padding: 50px 20px;
-
-            text-align: center;
-
-            color: #9ca3af;
-        }
-
-
-        /* =========================
-           ERROR
-        ========================= */
-
-        #errorMessage {
-
-            display: none;
-
-            background: #3b1d1d;
-
-            color: #fca5a5;
-
-            border: 1px solid #7f1d1d;
-
-            padding: 12px;
-
-            border-radius: 7px;
-
-            margin-bottom: 20px;
-        }
-
-
-        /* =========================
-           EDIT MODAL
-        ========================= */
-
-        .modal {
-
-            display: none;
-
-            position: fixed;
-
-            inset: 0;
-
-            background: rgba(0, 0, 0, 0.75);
-
-            justify-content: center;
-
-            align-items: center;
-
-            padding: 20px;
-
-            z-index: 1000;
-        }
-
-
-        .modal.show {
-            display: flex;
-        }
-
-
-        .modal-content {
-
-            width: 100%;
-
-            max-width: 600px;
-
-            background: #181b23;
-
-            border: 1px solid #303542;
-
-            border-radius: 10px;
-
-            padding: 25px;
-        }
-
-
-        .modal-header {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 20px;
-        }
-
-
-        .modal-header h2 {
-            font-size: 22px;
-        }
-
-
-        .close-btn {
-
-            background: transparent;
-
-            color: #9ca3af;
-
-            font-size: 24px;
-
-            padding: 2px 8px;
-        }
-
-
-        .close-btn:hover {
-            color: white;
-        }
-
-
-        .modal-actions {
-
-            display: flex;
-
-            justify-content: flex-end;
-
-            gap: 10px;
-
-            margin-top: 20px;
-        }
-
-
-        .cancel-btn {
-
-            background: #374151;
-
-            color: white;
-        }
-
-
-        .save-btn {
-
-            background: #2563eb;
-
-            color: white;
-        }
-
-
-        /* =========================
-           C# STYLE TASK ALERT
-        ========================= */
-
-        .alert-overlay {
-
-            display: none;
-
-            position: fixed;
-
-            inset: 0;
-
-            background: rgba(0, 0, 0, 0.72);
-
-            justify-content: center;
-
-            align-items: center;
-
-            z-index: 2000;
-
-            padding: 20px;
-        }
-
-
-        .alert-overlay.show {
-            display: flex;
-        }
-
-
-        .alert-box {
-
-            width: 100%;
-
-            max-width: 420px;
-
-            background: #1f232d;
-
-            border: 1px solid #3b414f;
-
-            border-radius: 8px;
-
-            box-shadow:
-                0 20px 50px
-                rgba(0, 0, 0, 0.6);
-
-            overflow: hidden;
-
-            animation: alertAppear 0.15s ease-out;
-        }
-
-
-        @keyframes alertAppear {
-
-            from {
-
-                opacity: 0;
-
-                transform: scale(0.95);
-
-            }
-
-            to {
-
-                opacity: 1;
-
-                transform: scale(1);
-
-            }
-        }
-
-
-        .alert-header {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            padding: 15px 18px;
-
-            background: #252a35;
-
-            border-bottom: 1px solid #3b414f;
-        }
-
-
-        .alert-icon {
-            font-size: 22px;
-        }
-
-
-        .alert-title {
-
-            font-size: 16px;
-
-            font-weight: bold;
-        }
-
-
-        .alert-body {
-
-            padding: 25px 20px;
-
-            color: #f5f5f5;
-
-            font-size: 16px;
-
-            line-height: 1.5;
-
-            word-break: break-word;
-        }
-
-
-        .alert-footer {
-
-            display: flex;
-
-            justify-content: flex-end;
-
-            padding: 12px 15px;
-
-            background: #181b23;
-
-            border-top: 1px solid #303542;
-        }
-
-
-        .alert-ok-btn {
-
-            min-width: 80px;
-
-            background: #2563eb;
-
-            color: white;
-        }
-
-
-        .alert-ok-btn:hover {
-            background: #1d4ed8;
-        }
-
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 800px) {
-
-            .stats {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-
-            .header {
-
-                flex-direction: column;
-
-                align-items: flex-start;
-            }
-        }
-
-
-        @media (max-width: 600px) {
-
-            .container {
-
-                width: 94%;
-
-                margin: 25px auto;
-            }
-
-
-            .stats {
-
-                grid-template-columns:
-                    1fr 1fr;
-            }
-
-
-            .form-row {
-
-                grid-template-columns: 1fr;
-            }
-
-
-            .task-top {
-
-                flex-direction: column;
-            }
-
-
-            .task-actions {
-
-                width: 100%;
-            }
-        }
-
-    </style>
-
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-
 
 <body>
 
-
 <div class="container">
 
-
-    <!-- =========================
+    <!-- =====================================================
          HEADER
-    ========================= -->
+    ====================================================== -->
 
     <div class="header">
 
         <div>
-
-            <h1>
-                Task Manager
-            </h1>
-
-            <p>
-                Manage your tasks, deadlines and reminders.
-            </p>
-
+            <h1>Task Manager</h1>
+            <p>Manage your tasks, deadlines and reminders.</p>
         </div>
 
+        <div class="header-right">
 
-        <div class="notification-area">
+            <div class="auth-area">
+                <span id="userInfo">Not logged in</span>
 
-            <span id="notificationStatus">
-                Notifications not enabled
-            </span>
+                <a
+                    id="loginButton"
+                    href="/login"
+                    class="login-btn"
+                >
+                    🔐 Login with Google
+                </a>
 
+                <button
+                    type="button"
+                    id="logoutButton"
+                    class="logout-btn"
+                    onclick="logout()"
+                    style="display: none;"
+                >
+                    Logout
+                </button>
+            </div>
 
-            <button
-                id="notificationButton"
-                class="notification-btn"
-                onclick="requestNotificationPermission()">
+            <div class="notification-area">
+                <span id="notificationStatus">
+                    Notifications not enabled
+                </span>
 
-                Enable Notifications
-
-            </button>
+                <button
+                    type="button"
+                    id="notificationButton"
+                    class="notification-btn"
+                    onclick="handleNotificationButton()"
+                >
+                    Enable Notifications
+                </button>
+            </div>
 
         </div>
-
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          ERROR
-    ========================= -->
+    ====================================================== -->
 
     <div id="errorMessage"></div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          STATISTICS
-    ========================= -->
+    ====================================================== -->
 
     <div class="stats">
 
-
         <div class="stat-card">
-
-            <h3>
-                Total Tasks
-            </h3>
-
-            <strong id="totalTasks">
-                0
-            </strong>
-
+            <h3>Total Tasks</h3>
+            <strong id="totalTasks">0</strong>
         </div>
 
-
         <div class="stat-card">
-
-            <h3>
-                Pending
-            </h3>
-
-            <strong id="pendingTasks">
-                0
-            </strong>
-
+            <h3>Pending</h3>
+            <strong id="pendingTasks">0</strong>
         </div>
 
-
         <div class="stat-card">
-
-            <h3>
-                Completed
-            </h3>
-
-            <strong id="completedTasks">
-                0
-            </strong>
-
+            <h3>Completed</h3>
+            <strong id="completedTasks">0</strong>
         </div>
 
-
         <div class="stat-card">
-
-            <h3>
-                Overdue
-            </h3>
-
-            <strong id="overdueTasks">
-                0
-            </strong>
-
+            <h3>Overdue</h3>
+            <strong id="overdueTasks">0</strong>
         </div>
-
 
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          ADD TASK
-    ========================= -->
+    ====================================================== -->
 
     <div class="task-form">
 
-
-        <h2>
-            Add New Task
-        </h2>
-
+        <h2>Add New Task</h2>
 
         <form id="taskForm">
 
-
             <div class="form-group">
-
-                <label for="title">
-                    Task Title
-                </label>
-
+                <label for="title">Task Title</label>
 
                 <input
                     type="text"
                     id="title"
                     placeholder="Enter task title"
-                    required>
-
+                    required
+                >
             </div>
 
 
             <div class="form-group">
-
-                <label for="description">
-                    Description
-                </label>
-
+                <label for="description">Description</label>
 
                 <textarea
                     id="description"
-                    placeholder="Enter task description">
-                </textarea>
-
+                    placeholder="Enter task description"
+                ></textarea>
             </div>
 
 
             <div class="form-row">
 
-
                 <div class="form-group">
-
-                    <label for="dueDate">
-                        Due Date & Time
-                    </label>
-
+                    <label for="dueDate">Due Date & Time</label>
 
                     <input
                         type="datetime-local"
                         id="dueDate"
-                        required>
-
+                        required
+                    >
                 </div>
 
-
                 <div class="form-group">
-
-                    <label for="reminder">
-                        Reminder
-                    </label>
-
+                    <label for="reminder">Reminder</label>
 
                     <input
                         type="text"
                         id="reminder"
-                        placeholder="Example: 30M, 2H, 1D">
-
+                        placeholder="Example: 30M, 2H, 1D"
+                    >
                 </div>
-
 
             </div>
 
 
             <div class="timezone-info">
-
                 Browser/Desktop Timezone:
-
-                <strong id="timezoneDisplay">
-                    Detecting...
-                </strong>
+                <strong id="timezoneDisplay">Detecting...</strong>
 
                 <br>
 
-                Task times and reminders use your
-                computer's local time.
-
+                Task times and reminders use your computer's local time.
             </div>
 
 
             <button
                 type="submit"
-                class="add-btn">
-
+                class="add-btn"
+            >
                 Add Task
-
             </button>
-
 
         </form>
 
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          FILTERS
-    ========================= -->
+    ====================================================== -->
 
-    <div class="filter-bar">
+    <div class="task-toolbar">
 
+        <div class="filter-bar">
+
+            <button
+                type="button"
+                class="filter-btn active"
+                onclick="filterTasks('all', this)"
+            >
+                All
+            </button>
 
         <button
-            class="filter-btn active"
-            onclick="filterTasks('all', this)">
-
-            All
-
-        </button>
-
-
-        <button
+            type="button"
             class="filter-btn"
-            onclick="filterTasks('pending', this)">
-
+            onclick="filterTasks('pending', this)"
+        >
             Pending
-
         </button>
 
-
         <button
+            type="button"
             class="filter-btn"
-            onclick="filterTasks('completed', this)">
-
+            onclick="filterTasks('completed', this)"
+        >
             Completed
-
         </button>
 
+            <button
+                type="button"
+                class="filter-btn"
+                onclick="filterTasks('overdue', this)"
+            >
+                Overdue
+            </button>
 
-        <button
-            class="filter-btn"
-            onclick="filterTasks('overdue', this)">
+        </div>
 
-            Overdue
-
-        </button>
-
-
-    </div>
-
-
-    <!-- =========================
-         TASK LIST
-    ========================= -->
-
-    <div id="taskList">
-
-        <div class="empty-state">
-
-            Loading tasks...
-
+        <div class="search-box">
+            <span>⌕</span>
+            <input
+                type="search"
+                id="searchTasks"
+                placeholder="Search tasks..."
+                oninput="renderTasks()"
+                aria-label="Search tasks"
+            >
         </div>
 
     </div>
 
 
+    <!-- =====================================================
+         TASK LIST
+    ====================================================== -->
+
+    <div id="taskList">
+        <div class="empty-state">
+            Loading tasks...
+        </div>
+    </div>
+
 </div>
 
 
-<!-- =========================
-     EDIT MODAL
-========================= -->
+<!-- =========================================================
+     TASK DETAILS MODAL
+========================================================= -->
 
-<div
-    id="editModal"
-    class="modal">
-
+<div id="detailsModal" class="modal">
 
     <div class="modal-content">
 
+        <div class="modal-header">
+            <h2 id="detailsTitle" class="details-title">
+                Task Details
+            </h2>
+
+            <button
+                type="button"
+                class="close-btn"
+                onclick="closeDetailsModal()"
+            >
+                ×
+            </button>
+        </div>
+
+
+        <div class="details-status-row">
+            <span id="detailsStatus" class="task-status pending">
+                PENDING
+            </span>
+        </div>
+
+
+        <div class="details-section">
+
+            <div class="details-label">
+                Description
+            </div>
+
+            <div
+                id="detailsDescription"
+                class="details-value details-description"
+            >
+                No description.
+            </div>
+
+        </div>
+
+
+        <div class="details-meta">
+
+            <div class="details-meta-box">
+
+                <div class="details-label">
+                    Due Date & Time
+                </div>
+
+                <div
+                    id="detailsDueDate"
+                    class="details-value"
+                >
+                    No deadline
+                </div>
+
+            </div>
+
+
+            <div class="details-meta-box">
+
+                <div class="details-label">
+                    Reminder
+                </div>
+
+                <div
+                    id="detailsReminder"
+                    class="details-value"
+                >
+                    No reminder
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     EDIT MODAL
+========================================================= -->
+
+<div id="editModal" class="modal">
+
+    <div class="modal-content">
 
         <div class="modal-header">
 
-            <h2>
-                Edit Task
-            </h2>
-
+            <h2>Edit Task</h2>
 
             <button
+                type="button"
                 class="close-btn"
-                onclick="closeEditModal()">
-
+                onclick="closeEditModal()"
+            >
                 ×
-
             </button>
 
         </div>
@@ -1151,7 +363,8 @@
 
         <input
             type="hidden"
-            id="editTaskId">
+            id="editTaskId"
+        >
 
 
         <div class="form-group">
@@ -1160,11 +373,11 @@
                 Task Title
             </label>
 
-
             <input
                 type="text"
                 id="editTitle"
-                required>
+                required
+            >
 
         </div>
 
@@ -1175,16 +388,14 @@
                 Description
             </label>
 
-
             <textarea
-                id="editDescription">
-            </textarea>
+                id="editDescription"
+            ></textarea>
 
         </div>
 
 
         <div class="form-row">
-
 
             <div class="form-group">
 
@@ -1192,11 +403,11 @@
                     Due Date & Time
                 </label>
 
-
                 <input
                     type="datetime-local"
                     id="editDueDate"
-                    required>
+                    required
+                >
 
             </div>
 
@@ -1207,14 +418,13 @@
                     Reminder
                 </label>
 
-
                 <input
                     type="text"
                     id="editReminder"
-                    placeholder="Example: 30M, 2H, 1D">
+                    placeholder="Example: 30M, 2H, 1D"
+                >
 
             </div>
-
 
         </div>
 
@@ -1224,7 +434,6 @@
             <label for="editStatus">
                 Status
             </label>
-
 
             <select id="editStatus">
 
@@ -1243,86 +452,72 @@
 
         <div class="modal-actions">
 
-
             <button
+                type="button"
                 class="cancel-btn"
-                onclick="closeEditModal()">
-
+                onclick="closeEditModal()"
+            >
                 Cancel
-
             </button>
-
 
             <button
+                type="button"
                 class="save-btn"
-                onclick="saveEdit()">
-
+                onclick="saveEdit()"
+            >
                 Save Changes
-
             </button>
-
 
         </div>
-
 
     </div>
 
 </div>
 
 
-<!-- =========================
-     C# STYLE TASK ALERT
-========================= -->
+<!-- =========================================================
+     TASK ALERT
+========================================================= -->
 
 <div
     id="taskAlert"
-    class="alert-overlay">
-
+    class="alert-overlay"
+>
 
     <div class="alert-box">
 
-
         <div class="alert-header">
 
+            <span class="alert-icon">⏰</span>
 
-            <span class="alert-icon">
-                ⏰
-            </span>
-
-
-            <span class="alert-title">
+            <span
+                id="alertTitle"
+                class="alert-title"
+            >
                 Task Reminder
             </span>
 
-
         </div>
 
-
-        <!--
-            TASK NAME WILL APPEAR HERE
-        -->
 
         <div
             id="alertTaskName"
-            class="alert-body">
-        </div>
+            class="alert-body"
+        ></div>
 
 
         <div class="alert-footer">
 
-
             <button
+                type="button"
                 id="alertOkButton"
                 class="alert-ok-btn"
-                onclick="closeTaskAlert()">
-
+                onclick="closeTaskAlert()"
+            >
                 OK
-
             </button>
 
-
         </div>
-
 
     </div>
 
@@ -1331,1889 +526,1564 @@
 
 <script>
 
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
-    /*
-     * ==========================================
-     * CONFIGURATION
-     * ==========================================
-     */
+const API_URL = "/tasks";
 
-    const API_URL = "/tasks";
-
-
-    /*
-     * Browser/desktop timezone.
-     *
-     * Example:
-     *
-     * Asia/Kolkata
-     * America/New_York
-     * Europe/London
-     */
-
-    const USER_TIMEZONE =
-        Intl.DateTimeFormat()
-            .resolvedOptions()
-            .timeZone;
+const USER_TIMEZONE =
+    Intl.DateTimeFormat()
+        .resolvedOptions()
+        .timeZone;
 
 
-    /*
-     * ==========================================
-     * GLOBAL VARIABLES
-     * ==========================================
-     */
+/* =========================================================
+   APPLICATION STATE
+========================================================= */
 
-    let tasks = [];
+let tasks = [];
 
-    let currentFilter = "all";
+let currentFilter = "all";
 
+let notificationsEnabled =
+    localStorage.getItem("notificationsEnabled") === "true";
 
-    /*
-     * Prevent duplicate reminders.
-     */
+const triggeredReminders = new Set();
 
-    const triggeredReminders =
-        new Set();
+const triggeredOverdueAlerts = new Set();
 
 
-    /*
-     * ==========================================
-     * INITIALIZATION
-     * ==========================================
-     */
+/* =========================================================
+   PAGE LOAD
+========================================================= */
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        () => {
+document.addEventListener("DOMContentLoaded", function () {
 
+    document.getElementById("timezoneDisplay").textContent =
+        USER_TIMEZONE || "Local browser timezone";
 
-            document
-                .getElementById(
-                    "timezoneDisplay"
-                )
-                .textContent =
-                USER_TIMEZONE ||
-                "Local browser timezone";
+    updateNotificationStatus();
 
+    checkLogin();
 
-            updateNotificationStatus();
+    setInterval(checkReminders, 10000);
 
+    setInterval(function () {
 
+        if (document.getElementById("logoutButton").style.display !== "none") {
             loadTasks();
+        }
+
+    }, 30000);
+
+});
 
 
-            /*
-             * Check reminders every 10 seconds.
-             */
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
 
-            setInterval(
-                checkReminders,
-                10000
+async function checkLogin() {
+
+    try {
+
+        const response = await fetch("/me", {
+            credentials: "include"
+        });
+
+        const userInfo =
+            document.getElementById("userInfo");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        const logoutButton =
+            document.getElementById("logoutButton");
+
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            if (data.authenticated && data.user) {
+
+                userInfo.textContent =
+                    `👤 ${data.user.name} (${data.user.email})`;
+
+                loginButton.style.display = "none";
+
+                logoutButton.style.display = "inline-block";
+
+                await loadTasks();
+
+                return;
+            }
+        }
+
+
+        userInfo.textContent = "Not logged in";
+
+        loginButton.style.display = "inline-block";
+
+        logoutButton.style.display = "none";
+
+        updateStats([]);
+
+        document.getElementById("taskList").innerHTML = `
+            <div class="empty-state">
+                Please log in to view your tasks.
+            </div>
+        `;
+
+    }
+
+    catch (error) {
+
+        console.error("Login check failed:", error);
+
+        showError(
+            "Unable to check login status."
+        );
+
+    }
+
+}
+
+
+function logout() {
+
+    window.location.href = "/logout";
+
+}
+
+
+/* =========================================================
+   ERROR HANDLING
+========================================================= */
+
+function showError(message) {
+
+    const errorElement =
+        document.getElementById("errorMessage");
+
+    errorElement.textContent = message;
+
+    errorElement.style.display = "block";
+
+    setTimeout(function () {
+
+        errorElement.style.display = "none";
+
+    }, 5000);
+
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+async function handleNotificationButton() {
+
+    if (!("Notification" in window)) {
+
+        showError(
+            "Browser notifications are not supported."
+        );
+
+        return;
+    }
+
+
+    if (notificationsEnabled) {
+
+        const disable =
+            confirm(
+                "Notifications are currently enabled.\n\n" +
+                "Disable notifications for Task Manager?"
             );
 
+        if (disable) {
+            disableNotifications();
+        }
 
-            /*
-             * Refresh tasks from MongoDB
-             * every 30 seconds.
-             */
+        return;
+    }
 
-            setInterval(
-                loadTasks,
-                30000
+
+    if (Notification.permission === "granted") {
+
+        notificationsEnabled = true;
+
+        localStorage.setItem(
+            "notificationsEnabled",
+            "true"
+        );
+
+        updateNotificationStatus();
+
+        return;
+    }
+
+
+    if (Notification.permission === "denied") {
+
+        showError(
+            "Notifications are blocked by your browser. " +
+            "Allow notifications in browser settings."
+        );
+
+        return;
+    }
+
+
+    await requestNotificationPermission();
+
+}
+
+
+async function requestNotificationPermission() {
+
+    try {
+
+        const permission =
+            await Notification.requestPermission();
+
+        if (permission === "granted") {
+
+            notificationsEnabled = true;
+
+            localStorage.setItem(
+                "notificationsEnabled",
+                "true"
             );
 
         }
+
+        updateNotificationStatus();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showError(
+            "Unable to enable notifications."
+        );
+
+    }
+
+}
+
+
+function disableNotifications() {
+
+    notificationsEnabled = false;
+
+    localStorage.setItem(
+        "notificationsEnabled",
+        "false"
     );
 
+    updateNotificationStatus();
 
-    /*
-     * ==========================================
-     * ERROR MESSAGE
-     * ==========================================
-     */
-
-    function showError(message) {
+}
 
 
-        const errorElement =
-            document.getElementById(
-                "errorMessage"
-            );
+function updateNotificationStatus() {
+
+    const status =
+        document.getElementById("notificationStatus");
+
+    const button =
+        document.getElementById("notificationButton");
 
 
-        errorElement.textContent =
-            message;
+    if (!("Notification" in window)) {
 
+        status.textContent =
+            "Notifications unavailable";
 
-        errorElement.style.display =
-            "block";
+        button.style.display = "none";
 
-
-        setTimeout(
-            () => {
-
-                errorElement.style.display =
-                    "none";
-
-            },
-            5000
-        );
-
+        return;
     }
 
 
-    /*
-     * ==========================================
-     * NOTIFICATION PERMISSION
-     * ==========================================
-     */
+    button.style.display = "inline-block";
 
-    async function requestNotificationPermission() {
 
-
-        if (
-            !("Notification" in window)
-        ) {
-
-            showError(
-                "Browser notifications are not supported."
-            );
-
-            return;
-        }
-
-
-        try {
-
-
-            const permission =
-                await Notification
-                    .requestPermission();
-
-
-            updateNotificationStatus();
-
-
-            if (
-                permission === "granted"
-            ) {
-
-                console.log(
-                    "Notifications enabled."
-                );
-
-            }
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            showError(
-                "Unable to enable notifications."
-            );
-
-        }
-
-    }
-
-
-    function updateNotificationStatus() {
-
-
-        const status =
-            document.getElementById(
-                "notificationStatus"
-            );
-
-
-        const button =
-            document.getElementById(
-                "notificationButton"
-            );
-
-
-        if (
-            !("Notification" in window)
-        ) {
-
-            status.textContent =
-                "Notifications unavailable";
-
-            button.style.display =
-                "none";
-
-            return;
-        }
-
-
-        if (
-            Notification.permission ===
-            "granted"
-        ) {
-
-
-            status.textContent =
-                "Notifications enabled";
-
-
-            button.textContent =
-                "Notifications Enabled";
-
-
-            button.disabled =
-                true;
-
-
-            button.style.opacity =
-                "0.6";
-
-
-        } else if (
-            Notification.permission ===
-            "denied"
-        ) {
-
-
-            status.textContent =
-                "Notifications blocked";
-
-
-            button.textContent =
-                "Notifications Blocked";
-
-
-            button.disabled =
-                true;
-
-
-        } else {
-
-
-            status.textContent =
-                "Notifications not enabled";
-
-
-            button.textContent =
-                "Enable Notifications";
-
-
-            button.disabled =
-                false;
-
-        }
-
-    }
-
-
-    /*
-     * ==========================================
-     * LOAD TASKS
-     * ==========================================
-     */
-
-    async function loadTasks() {
-
-
-        try {
-
-
-            const response =
-                await fetch(API_URL);
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Failed to load tasks."
-                );
-
-            }
-
-
-            tasks =
-                await response.json();
-
-
-            renderTasks();
-
-
-            updateStatistics();
-
-
-            /*
-             * Check reminders immediately.
-             */
-
-            checkReminders();
-
-
-        } catch (error) {
-
-
-            console.error(error);
-
-
-            showError(
-                "Unable to load tasks. Make sure Flask is running."
-            );
-
-        }
-
-    }
-
-
-    /*
-     * ==========================================
-     * ADD TASK
-     * ==========================================
-     */
-
-    document
-        .getElementById("taskForm")
-        .addEventListener(
-            "submit",
-            async function(event) {
-
-
-                event.preventDefault();
-
-
-                const title =
-                    document
-                        .getElementById(
-                            "title"
-                        )
-                        .value
-                        .trim();
-
-
-                const description =
-                    document
-                        .getElementById(
-                            "description"
-                        )
-                        .value
-                        .trim();
-
-
-                const dueDate =
-                    document
-                        .getElementById(
-                            "dueDate"
-                        )
-                        .value;
-
-
-                const reminder =
-                    document
-                        .getElementById(
-                            "reminder"
-                        )
-                        .value
-                        .trim();
-
-
-                if (!title) {
-
-                    showError(
-                        "Please enter a task title."
-                    );
-
-                    return;
-                }
-
-
-                if (!dueDate) {
-
-                    showError(
-                        "Please select a due date and time."
-                    );
-
-                    return;
-                }
-
-
-                if (
-                    reminder &&
-                    !parseReminder(reminder)
-                ) {
-
-                    showError(
-                        "Invalid reminder format. Use 30M, 2H or 1D."
-                    );
-
-                    return;
-                }
-
-
-                try {
-
-
-                    const response =
-                        await fetch(
-                            API_URL,
-                            {
-
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body:
-                                    JSON.stringify({
-
-                                        title:
-                                            title,
-
-                                        description:
-                                            description,
-
-                                        dueDate:
-                                            dueDate,
-
-                                        reminder:
-                                            reminder,
-
-                                        status:
-                                            "pending"
-
-                                    })
-
-                            }
-                        );
-
-
-                    if (!response.ok) {
-
-                        throw new Error(
-                            "Failed to create task."
-                        );
-
-                    }
-
-
-                    document
-                        .getElementById(
-                            "taskForm"
-                        )
-                        .reset();
-
-
-                    await loadTasks();
-
-
-                } catch (error) {
-
-
-                    console.error(error);
-
-
-                    showError(
-                        "Unable to create task."
-                    );
-
-                }
-
-            }
-        );
-
-
-    /*
-     * ==========================================
-     * RENDER TASKS
-     * ==========================================
-     */
-
-    function renderTasks() {
-
-
-        const taskList =
-            document.getElementById(
-                "taskList"
-            );
-
-
-        let filteredTasks =
-            tasks.filter(
-                task => {
-
-
-                    if (
-                        currentFilter ===
-                        "all"
-                    ) {
-
-                        return true;
-                    }
-
-
-                    if (
-                        currentFilter ===
-                        "pending"
-                    ) {
-
-                        return (
-                            task.status !==
-                            "done"
-                        );
-
-                    }
-
-
-                    if (
-                        currentFilter ===
-                        "completed"
-                    ) {
-
-                        return (
-                            task.status ===
-                            "done"
-                        );
-
-                    }
-
-
-                    if (
-                        currentFilter ===
-                        "overdue"
-                    ) {
-
-                        return isOverdue(task);
-
-                    }
-
-
-                    return true;
-
-                }
-            );
-
-
-        filteredTasks.sort(
-            (a, b) => {
-
-
-                if (!a.dueDate) {
-                    return 1;
-                }
-
-
-                if (!b.dueDate) {
-                    return -1;
-                }
-
-
-                return (
-                    parseLocalDateTime(
-                        a.dueDate
-                    ) -
-                    parseLocalDateTime(
-                        b.dueDate
-                    )
-                );
-
-            }
-        );
-
-
-        if (
-            filteredTasks.length === 0
-        ) {
-
-
-            taskList.innerHTML = `
-
-                <div class="empty-state">
-                    No tasks found.
-                </div>
-
-            `;
-
-
-            return;
-        }
-
-
-        taskList.innerHTML =
-            filteredTasks
-                .map(
-                    task => {
-
-
-                        const overdue =
-                            isOverdue(task);
-
-
-                        const completed =
-                            task.status ===
-                            "done";
-
-
-                        return `
-
-                            <div class="task-card
-                                ${
-                                    completed
-                                        ? "completed"
-                                        : ""
-                                }">
-
-                                <div class="task-top">
-
-
-                                    <div
-                                        style="flex: 1;">
-
-
-                                        <div
-                                            class="task-title">
-
-                                            ${
-                                                escapeHtml(
-                                                    task.title ||
-                                                    "Untitled Task"
-                                                )
-                                            }
-
-                                        </div>
-
-
-                                        ${
-                                            task.description
-                                                ?
-                                                `
-                                                <div
-                                                    class="task-description">
-
-                                                    ${
-                                                        escapeHtml(
-                                                            task.description
-                                                        )
-                                                    }
-
-                                                </div>
-                                                `
-                                                :
-                                                ""
-                                        }
-
-
-                                        <div
-                                            class="task-meta">
-
-
-                                            ${
-                                                task.dueDate
-                                                    ?
-                                                    `
-                                                    <span
-                                                        class="badge due">
-
-                                                        📅
-                                                        ${
-                                                            formatDateTime(
-                                                                task.dueDate
-                                                            )
-                                                        }
-
-                                                    </span>
-                                                    `
-                                                    :
-                                                    ""
-                                            }
-
-
-                                            ${
-                                                task.reminder
-                                                    ?
-                                                    `
-                                                    <span
-                                                        class="badge reminder">
-
-                                                        ⏰ Reminder:
-                                                        ${
-                                                            escapeHtml(
-                                                                task.reminder
-                                                            )
-                                                        }
-
-                                                    </span>
-                                                    `
-                                                    :
-                                                    ""
-                                            }
-
-
-                                            ${
-                                                overdue &&
-                                                !completed
-                                                    ?
-                                                    `
-                                                    <span
-                                                        class="badge overdue">
-
-                                                        ⚠ Overdue
-
-                                                    </span>
-                                                    `
-                                                    :
-                                                    ""
-                                            }
-
-
-                                            ${
-                                                completed
-                                                    ?
-                                                    `
-                                                    <span
-                                                        class="badge done">
-
-                                                        ✓ Completed
-
-                                                    </span>
-                                                    `
-                                                    :
-                                                    ""
-                                            }
-
-
-                                        </div>
-
-
-                                    </div>
-
-
-                                    <div
-                                        class="task-actions">
-
-
-                                        ${
-                                            !completed
-                                                ?
-                                                `
-                                                <button
-                                                    class="done-btn"
-                                                    onclick="completeTask(
-                                                        '${task.id}'
-                                                    )">
-
-                                                    ✓ Done
-
-                                                </button>
-                                                `
-                                                :
-                                                ""
-                                        }
-
-
-                                        <button
-                                            class="edit-btn"
-                                            onclick="openEditModal(
-                                                '${task.id}'
-                                            )">
-
-                                            Edit
-
-                                        </button>
-
-
-                                        <button
-                                            class="delete-btn"
-                                            onclick="deleteTask(
-                                                '${task.id}'
-                                            )">
-
-                                            Delete
-
-                                        </button>
-
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </div>
-
-                        `;
-
-                    }
-                )
-                .join("");
-
-    }
-
-
-    /*
-     * ==========================================
-     * COMPLETE TASK
-     * ==========================================
-     */
-
-    async function completeTask(id) {
-
-
-        const task =
-            tasks.find(
-                t => t.id === id
-            );
-
-
-        if (!task) {
-            return;
-        }
-
-
-        try {
-
-
-            const response =
-                await fetch(
-                    `${API_URL}/${id}`,
-                    {
-
-                        method: "PUT",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                title:
-                                    task.title,
-
-                                description:
-                                    task.description,
-
-                                dueDate:
-                                    task.dueDate,
-
-                                reminder:
-                                    task.reminder,
-
-                                status:
-                                    "done"
-
-                            })
-
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Failed to complete task."
-                );
-
-            }
-
-
-            removeTaskReminders(id);
-
-
-            await loadTasks();
-
-
-        } catch (error) {
-
-
-            console.error(error);
-
-
-            showError(
-                "Unable to complete task."
-            );
-
-        }
-
-    }
-
-
-    /*
-     * ==========================================
-     * DELETE TASK
-     * ==========================================
-     */
-
-    async function deleteTask(id) {
-
-
-        if (
-            !confirm(
-                "Are you sure you want to delete this task?"
-            )
-        ) {
-
-            return;
-        }
-
-
-        try {
-
-
-            const response =
-                await fetch(
-                    `${API_URL}/${id}`,
-                    {
-
-                        method: "DELETE"
-
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Failed to delete task."
-                );
-
-            }
-
-
-            removeTaskReminders(id);
-
-
-            await loadTasks();
-
-
-        } catch (error) {
-
-
-            console.error(error);
-
-
-            showError(
-                "Unable to delete task."
-            );
-
-        }
-
-    }
-
-
-    /*
-     * ==========================================
-     * OPEN EDIT MODAL
-     * ==========================================
-     */
-
-    function openEditModal(id) {
-
-
-        const task =
-            tasks.find(
-                t => t.id === id
-            );
-
-
-        if (!task) {
-            return;
-        }
-
-
-        document
-            .getElementById(
-                "editTaskId"
-            )
-            .value =
-            task.id;
-
-
-        document
-            .getElementById(
-                "editTitle"
-            )
-            .value =
-            task.title || "";
-
-
-        document
-            .getElementById(
-                "editDescription"
-            )
-            .value =
-            task.description || "";
-
-
-        document
-            .getElementById(
-                "editDueDate"
-            )
-            .value =
-            convertToDateTimeLocal(
-                task.dueDate
-            );
-
-
-        document
-            .getElementById(
-                "editReminder"
-            )
-            .value =
-            task.reminder || "";
-
-
-        document
-            .getElementById(
-                "editStatus"
-            )
-            .value =
-            task.status || "pending";
-
-
-        document
-            .getElementById(
-                "editModal"
-            )
-            .classList
-            .add("show");
-
-    }
-
-
-    /*
-     * ==========================================
-     * SAVE EDIT
-     * ==========================================
-     */
-
-    async function saveEdit() {
-
-
-        const id =
-            document
-                .getElementById(
-                    "editTaskId"
-                )
-                .value;
-
-
-        const title =
-            document
-                .getElementById(
-                    "editTitle"
-                )
-                .value
-                .trim();
-
-
-        const description =
-            document
-                .getElementById(
-                    "editDescription"
-                )
-                .value
-                .trim();
-
-
-        const dueDate =
-            document
-                .getElementById(
-                    "editDueDate"
-                )
-                .value;
-
-
-        const reminder =
-            document
-                .getElementById(
-                    "editReminder"
-                )
-                .value
-                .trim();
-
-
-        const status =
-            document
-                .getElementById(
-                    "editStatus"
-                )
-                .value;
-
-
-        if (!title) {
-
-            showError(
-                "Please enter a task title."
-            );
-
-            return;
-        }
-
-
-        if (!dueDate) {
-
-            showError(
-                "Please select a due date and time."
-            );
-
-            return;
-        }
-
-
-        if (
-            reminder &&
-            !parseReminder(reminder)
-        ) {
-
-            showError(
-                "Invalid reminder format. Use 30M, 2H or 1D."
-            );
-
-            return;
-        }
-
-
-        try {
-
-
-            const response =
-                await fetch(
-                    `${API_URL}/${id}`,
-                    {
-
-                        method: "PUT",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                title:
-                                    title,
-
-                                description:
-                                    description,
-
-                                dueDate:
-                                    dueDate,
-
-                                reminder:
-                                    reminder,
-
-                                status:
-                                    status
-
-                            })
-
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Failed to update task."
-                );
-
-            }
-
-
-            removeTaskReminders(id);
-
-
-            closeEditModal();
-
-
-            await loadTasks();
-
-
-        } catch (error) {
-
-
-            console.error(error);
-
-
-            showError(
-                "Unable to update task."
-            );
-
-        }
-
-    }
-
-
-    /*
-     * ==========================================
-     * CLOSE EDIT MODAL
-     * ==========================================
-     */
-
-    function closeEditModal() {
-
-
-        document
-            .getElementById(
-                "editModal"
-            )
-            .classList
-            .remove("show");
-
-    }
-
-
-    /*
-     * ==========================================
-     * FILTER TASKS
-     * ==========================================
-     */
-
-    function filterTasks(
-        filter,
-        button
+    if (
+        notificationsEnabled &&
+        Notification.permission === "granted"
     ) {
 
+        status.textContent =
+            "Notifications enabled";
 
-        currentFilter =
-            filter;
+        button.textContent =
+            "Disable Notifications";
+
+        return;
+    }
 
 
-        document
-            .querySelectorAll(
-                ".filter-btn"
-            )
-            .forEach(
-                btn => {
+    if (Notification.permission === "denied") {
 
-                    btn.classList
-                        .remove(
-                            "active"
-                        );
+        status.textContent =
+            "Notifications blocked";
 
-                }
+        button.textContent =
+            "Notification Settings";
+
+        return;
+    }
+
+
+    status.textContent =
+        "Notifications not enabled";
+
+    button.textContent =
+        "Enable Notifications";
+
+}
+
+
+/* =========================================================
+   LOAD TASKS
+========================================================= */
+
+async function loadTasks() {
+
+    try {
+
+        const response =
+            await fetch(API_URL, {
+                credentials: "include"
+            });
+
+
+        if (response.status === 401) {
+
+            return;
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load tasks"
             );
 
+        }
 
-        button.classList
-            .add("active");
 
+        tasks = await response.json();
 
         renderTasks();
 
-    }
+        updateStats(tasks);
 
-
-    /*
-     * ==========================================
-     * STATISTICS
-     * ==========================================
-     */
-
-    function updateStatistics() {
-
-
-        const total =
-            tasks.length;
-
-
-        const completed =
-            tasks.filter(
-                task =>
-                    task.status ===
-                    "done"
-            ).length;
-
-
-        const pending =
-            tasks.filter(
-                task =>
-                    task.status !==
-                    "done"
-            ).length;
-
-
-        const overdue =
-            tasks.filter(
-                task =>
-                    isOverdue(task)
-            ).length;
-
-
-        document
-            .getElementById(
-                "totalTasks"
-            )
-            .textContent =
-            total;
-
-
-        document
-            .getElementById(
-                "pendingTasks"
-            )
-            .textContent =
-            pending;
-
-
-        document
-            .getElementById(
-                "completedTasks"
-            )
-            .textContent =
-            completed;
-
-
-        document
-            .getElementById(
-                "overdueTasks"
-            )
-            .textContent =
-            overdue;
+        checkReminders();
 
     }
 
+    catch (error) {
 
-    /*
-     * ==========================================
-     * OVERDUE
-     * ==========================================
-     */
+        console.error(error);
 
-    function isOverdue(task) {
+        showError(
+            "Unable to load tasks."
+        );
 
+    }
 
-        if (!task.dueDate) {
-            return false;
-        }
+}
 
 
-        if (
-            task.status ===
-            "done"
-        ) {
+/* =========================================================
+   CREATE TASK
+========================================================= */
 
-            return false;
-        }
+document
+    .getElementById("taskForm")
+    .addEventListener("submit", async function (event) {
 
+        event.preventDefault();
+
+
+        const title =
+            document.getElementById("title").value.trim();
+
+        const description =
+            document.getElementById("description").value;
 
         const dueDate =
-            parseLocalDateTime(
-                task.dueDate
+            document.getElementById("dueDate").value;
+
+        const reminder =
+            document.getElementById("reminder").value.trim();
+
+
+        if (!title || !dueDate) {
+
+            showError(
+                "Please enter a title and due date."
             );
 
-
-        if (!dueDate) {
-            return false;
+            return;
         }
 
 
-        return (
-            new Date() >
-            dueDate
-        );
+        if (!validateReminder(reminder)) {
 
-    }
+            showError(
+                "Invalid reminder. Use formats such as 30M, 2H or 1D."
+            );
 
-
-    /*
-     * ==========================================
-     * PARSE LOCAL DATE/TIME
-     * ==========================================
-     */
-
-    function parseLocalDateTime(
-        dateTimeString
-    ) {
-
-
-        if (!dateTimeString) {
-            return null;
+            return;
         }
 
 
-        const parts =
-            dateTimeString
-                .split("T");
+        try {
+
+            const response =
+                await fetch(API_URL, {
+
+                    method: "POST",
+
+                    credentials: "include",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        title: title,
+                        description: description,
+                        dueDate: dueDate,
+                        reminder: reminder,
+                        status: "pending"
+                    })
+
+                });
 
 
-        if (
-            parts.length !== 2
-        ) {
-
-            return null;
-        }
+            const data =
+                await response.json();
 
 
-        const dateValues =
-            parts[0]
-                .split("-")
-                .map(Number);
+            if (!response.ok) {
 
-
-        const timeValues =
-            parts[1]
-                .split(":")
-                .map(Number);
-
-
-        if (
-            dateValues.length !== 3 ||
-            timeValues.length < 2
-        ) {
-
-            return null;
-        }
-
-
-        /*
-         * IMPORTANT:
-         *
-         * new Date(...)
-         * uses the desktop's local timezone.
-         */
-
-        return new Date(
-
-            dateValues[0],
-
-            dateValues[1] - 1,
-
-            dateValues[2],
-
-            timeValues[0],
-
-            timeValues[1],
-
-            0
-
-        );
-
-    }
-
-
-    /*
-     * ==========================================
-     * PARSE REMINDER
-     * ==========================================
-     *
-     * 30M = 30 minutes
-     * 2H  = 2 hours
-     * 1D  = 1 day
-     */
-
-    function parseReminder(
-        reminder
-    ) {
-
-
-        if (!reminder) {
-            return null;
-        }
-
-
-        const match =
-            reminder
-                .trim()
-                .toUpperCase()
-                .match(
-                    /^(\d+)\s*(M|H|D)$/
+                throw new Error(
+                    data.error || "Failed to create task"
                 );
 
+            }
 
-        if (!match) {
-            return null;
+
+            document
+                .getElementById("taskForm")
+                .reset();
+
+
+            removeTaskReminders(data.id);
+
+            removeTaskOverdueAlerts(data.id);
+
+            await loadTasks();
+
         }
 
+        catch (error) {
 
-        const value =
-            parseInt(
-                match[1],
-                10
-            );
+            console.error(error);
 
+            showError(error.message);
 
-        const unit =
-            match[2];
-
-
-        if (unit === "M") {
-
-            return (
-                value *
-                60 *
-                1000
-            );
         }
 
-
-        if (unit === "H") {
-
-            return (
-                value *
-                60 *
-                60 *
-                1000
-            );
-        }
+    });
 
 
-        if (unit === "D") {
+/* =========================================================
+   REMINDER PARSING
+========================================================= */
 
-            return (
-                value *
-                24 *
-                60 *
-                60 *
-                1000
-            );
-        }
+function parseReminder(reminder) {
 
-
+    if (!reminder) {
         return null;
-
     }
 
 
-    /*
-     * ==========================================
-     * CALCULATE REMINDER TIME
-     * ==========================================
-     */
+    const match =
+        String(reminder)
+            .trim()
+            .toUpperCase()
+            .match(/^(\d+)\s*(M|H|D)$/);
 
-    function getReminderTime(
-        task
+
+    if (!match) {
+        return null;
+    }
+
+
+    const value =
+        Number(match[1]);
+
+    const unit =
+        match[2];
+
+
+    if (value <= 0) {
+        return null;
+    }
+
+
+    if (unit === "M") {
+        return value * 60 * 1000;
+    }
+
+    if (unit === "H") {
+        return value * 60 * 60 * 1000;
+    }
+
+    if (unit === "D") {
+        return value * 24 * 60 * 60 * 1000;
+    }
+
+
+    return null;
+
+}
+
+
+function validateReminder(reminder) {
+
+    if (!reminder) {
+        return true;
+    }
+
+    return parseReminder(reminder) !== null;
+
+}
+
+
+function getReminderTime(task) {
+
+    if (!task.dueDate || !task.reminder) {
+        return null;
+    }
+
+
+    const dueDate =
+        parseLocalDateTime(task.dueDate);
+
+    const duration =
+        parseReminder(task.reminder);
+
+
+    if (!dueDate || duration === null) {
+        return null;
+    }
+
+
+    return new Date(
+        dueDate.getTime() - duration
+    );
+
+}
+
+
+/* =========================================================
+   LOCAL DATE/TIME PARSER
+========================================================= */
+
+function parseLocalDateTime(dateTimeString) {
+
+    if (!dateTimeString) {
+        return null;
+    }
+
+
+    const parts =
+        String(dateTimeString).split("T");
+
+
+    if (parts.length !== 2) {
+        return null;
+    }
+
+
+    const dateValues =
+        parts[0].split("-").map(Number);
+
+    const timeValues =
+        parts[1].split(":").map(Number);
+
+
+    if (
+        dateValues.length !== 3 ||
+        timeValues.length < 2 ||
+        dateValues.some(Number.isNaN) ||
+        timeValues.some(Number.isNaN)
     ) {
+        return null;
+    }
 
 
-        if (
-            !task.dueDate ||
-            !task.reminder
-        ) {
-
-            return null;
-        }
-
-
-        const dueDate =
-            parseLocalDateTime(
-                task.dueDate
-            );
-
-
-        if (!dueDate) {
-            return null;
-        }
-
-
-        const duration =
-            parseReminder(
-                task.reminder
-            );
-
-
-        if (
-            duration === null
-        ) {
-
-            return null;
-        }
-
-
-        return new Date(
-            dueDate.getTime() -
-            duration
+    const date =
+        new Date(
+            dateValues[0],
+            dateValues[1] - 1,
+            dateValues[2],
+            timeValues[0],
+            timeValues[1],
+            0
         );
 
+
+    return isNaN(date.getTime())
+        ? null
+        : date;
+
+}
+
+
+/* =========================================================
+   TASK STATUS
+========================================================= */
+
+function getTaskStatus(task) {
+
+    if (task.status === "done") {
+        return "completed";
     }
 
 
-    /*
-     * ==========================================
-     * CHECK REMINDERS
-     * ==========================================
-     */
+    if (task.dueDate) {
 
-    function checkReminders() {
+        const dueDate =
+            parseLocalDateTime(task.dueDate);
 
-
-        const now =
-            new Date();
+        if (dueDate && new Date() >= dueDate) {
+            return "overdue";
+        }
+    }
 
 
-        tasks.forEach(
-            task => {
+    return "pending";
+
+}
 
 
-                /*
-                 * Don't alert completed tasks.
-                 */
+function getStatusLabel(status) {
 
-                if (
-                    task.status ===
-                    "done"
-                ) {
+    if (status === "completed") {
+        return "COMPLETED";
+    }
 
-                    return;
+    if (status === "overdue") {
+        return "OVERDUE";
+    }
+
+    return "PENDING";
+
+}
+
+
+/* =========================================================
+   RENDER TASKS
+========================================================= */
+
+function renderTasks() {
+
+    const taskList =
+        document.getElementById("taskList");
+
+
+    const searchTerm =
+        (document.getElementById("searchTasks")?.value || "")
+            .trim()
+            .toLowerCase();
+
+    let filteredTasks =
+        tasks.filter(function (task) {
+
+            const status =
+                getTaskStatus(task);
+
+            const matchesSearch =
+                !searchTerm ||
+                String(task.title || "").toLowerCase().includes(searchTerm) ||
+                String(task.description || "").toLowerCase().includes(searchTerm);
+
+            if (!matchesSearch) {
+                return false;
+            }
+
+
+            if (currentFilter === "all") {
+                return true;
+            }
+
+            if (currentFilter === "pending") {
+                return status === "pending";
+            }
+
+            if (currentFilter === "completed") {
+                return status === "completed";
+            }
+
+            if (currentFilter === "overdue") {
+                return status === "overdue";
+            }
+
+            return true;
+
+        });
+
+
+    if (filteredTasks.length === 0) {
+
+        taskList.innerHTML = `
+            <div class="empty-state">
+                ${
+                    tasks.length === 0
+                        ? "No tasks yet. Add your first task above."
+                        : "No tasks match this filter."
                 }
+            </div>
+        `;
+
+        return;
+    }
 
 
-                const reminderTime =
-                    getReminderTime(
-                        task
+    taskList.innerHTML =
+        filteredTasks
+            .map(function (task) {
+
+                const status =
+                    getTaskStatus(task);
+
+                const statusLabel =
+                    getStatusLabel(status);
+
+                const safeTitle =
+                    escapeHtml(
+                        task.title || "Untitled Task"
                     );
 
+                const dueText =
+                    formatDateTime(task.dueDate);
 
-                if (!reminderTime) {
-                    return;
+
+                return `
+                    <div
+                        class="task-card ${status === "completed" ? "completed" : ""}"
+                        data-task-id="${escapeHtml(task.id)}"
+                        onclick="openDetailsModal('${escapeJs(task.id)}')"
+                        title="Click to view task details"
+                    >
+
+                        <div class="task-main">
+
+                            <div class="task-info">
+
+                                <div class="task-title-row">
+
+                                    <div class="task-title">
+                                        ${safeTitle}
+                                    </div>
+
+                                    <span class="task-status ${status}">
+                                        ${statusLabel}
+                                    </span>
+
+                                </div>
+
+                                <div class="task-due">
+                                    Due:
+                                    <strong>${escapeHtml(dueText)}</strong>
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="task-actions"
+                                onclick="event.stopPropagation()"
+                            >
+
+                                ${
+                                    status !== "completed"
+                                        ? `
+                                            <button
+                                                type="button"
+                                                class="done-btn"
+                                                onclick="completeTask('${escapeJs(task.id)}')"
+                                            >
+                                                Done
+                                            </button>
+                                        `
+                                        : `
+                                            <button
+                                                type="button"
+                                                class="done-btn"
+                                                onclick="markPending('${escapeJs(task.id)}')"
+                                            >
+                                                Undo
+                                            </button>
+                                        `
+                                }
+
+                                <button
+                                    type="button"
+                                    class="edit-btn"
+                                    onclick="openEditModal('${escapeJs(task.id)}')"
+                                >
+                                    Edit
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="delete-btn"
+                                    onclick="deleteTask('${escapeJs(task.id)}')"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+function filterTasks(filter, button) {
+
+    currentFilter = filter;
+
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(function (item) {
+
+            item.classList.remove("active");
+
+        });
+
+
+    button.classList.add("active");
+
+    renderTasks();
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateStats(taskArray) {
+
+    let pending = 0;
+    let completed = 0;
+    let overdue = 0;
+
+
+    taskArray.forEach(function (task) {
+
+        const status =
+            getTaskStatus(task);
+
+
+        if (status === "pending") {
+            pending++;
+        }
+
+        else if (status === "completed") {
+            completed++;
+        }
+
+        else if (status === "overdue") {
+            overdue++;
+        }
+
+    });
+
+
+    document.getElementById("totalTasks").textContent =
+        taskArray.length;
+
+    document.getElementById("pendingTasks").textContent =
+        pending;
+
+    document.getElementById("completedTasks").textContent =
+        completed;
+
+    document.getElementById("overdueTasks").textContent =
+        overdue;
+
+}
+
+
+/* =========================================================
+   COMPLETE / UNDO
+========================================================= */
+
+async function completeTask(id) {
+
+    await changeTaskStatus(id, "done");
+
+}
+
+
+async function markPending(id) {
+
+    await changeTaskStatus(id, "pending");
+
+}
+
+
+async function changeTaskStatus(id, status) {
+
+    const task =
+        tasks.find(function (item) {
+            return item.id === id;
+        });
+
+
+    if (!task) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/${encodeURIComponent(id)}`,
+                {
+
+                    method: "PUT",
+
+                    credentials: "include",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        title: task.title,
+                        description: task.description,
+                        dueDate: task.dueDate,
+                        reminder: task.reminder,
+                        status: status
+                    })
+
                 }
+            );
 
 
-                /*
-                 * Unique identifier.
-                 */
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "Unable to update task"
+            );
+
+        }
+
+
+        removeTaskReminders(id);
+
+        removeTaskOverdueAlerts(id);
+
+        await loadTasks();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showError(error.message);
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE TASK
+========================================================= */
+
+async function deleteTask(id) {
+
+    const task =
+        tasks.find(function (item) {
+            return item.id === id;
+        });
+
+
+    if (!task) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            `Delete "${task.title || "Untitled Task"}"?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/${encodeURIComponent(id)}`,
+                {
+                    method: "DELETE",
+                    credentials: "include"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "Unable to delete task"
+            );
+
+        }
+
+
+        removeTaskReminders(id);
+
+        removeTaskOverdueAlerts(id);
+
+        await loadTasks();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showError(error.message);
+
+    }
+
+}
+
+
+/* =========================================================
+   EDIT MODAL
+========================================================= */
+
+function openEditModal(id) {
+
+    const task =
+        tasks.find(function (item) {
+            return item.id === id;
+        });
+
+
+    if (!task) {
+        return;
+    }
+
+
+    document.getElementById("editTaskId").value =
+        task.id;
+
+    document.getElementById("editTitle").value =
+        task.title || "";
+
+    document.getElementById("editDescription").value =
+        task.description || "";
+
+    document.getElementById("editDueDate").value =
+        convertToDateTimeLocal(task.dueDate);
+
+    document.getElementById("editReminder").value =
+        task.reminder || "";
+
+    document.getElementById("editStatus").value =
+        task.status === "done"
+            ? "done"
+            : "pending";
+
+
+    document
+        .getElementById("editModal")
+        .classList.add("show");
+
+}
+
+
+function closeEditModal() {
+
+    document
+        .getElementById("editModal")
+        .classList.remove("show");
+
+}
+
+
+async function saveEdit() {
+
+    const id =
+        document.getElementById("editTaskId").value;
+
+    const title =
+        document.getElementById("editTitle").value.trim();
+
+    const description =
+        document.getElementById("editDescription").value;
+
+    const dueDate =
+        document.getElementById("editDueDate").value;
+
+    const reminder =
+        document.getElementById("editReminder").value.trim();
+
+    const status =
+        document.getElementById("editStatus").value;
+
+
+    if (!title || !dueDate) {
+
+        showError(
+            "Title and due date are required."
+        );
+
+        return;
+    }
+
+
+    if (!validateReminder(reminder)) {
+
+        showError(
+            "Invalid reminder. Use formats such as 30M, 2H or 1D."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/${encodeURIComponent(id)}`,
+                {
+
+                    method: "PUT",
+
+                    credentials: "include",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        title: title,
+                        description: description,
+                        dueDate: dueDate,
+                        reminder: reminder,
+                        status: status
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "Unable to update task"
+            );
+
+        }
+
+
+        removeTaskReminders(id);
+
+        removeTaskOverdueAlerts(id);
+
+        closeEditModal();
+
+        await loadTasks();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showError(error.message);
+
+    }
+
+}
+
+
+/* =========================================================
+   TASK DETAILS MODAL
+========================================================= */
+
+function openDetailsModal(id) {
+
+    const task =
+        tasks.find(function (item) {
+            return item.id === id;
+        });
+
+
+    if (!task) {
+        return;
+    }
+
+
+    const status =
+        getTaskStatus(task);
+
+
+    const statusElement =
+        document.getElementById("detailsStatus");
+
+
+    statusElement.textContent =
+        getStatusLabel(status);
+
+    statusElement.className =
+        `task-status ${status}`;
+
+
+    document.getElementById("detailsTitle").textContent =
+        task.title || "Untitled Task";
+
+
+    document.getElementById("detailsDescription").textContent =
+        task.description || "No description provided.";
+
+
+    document.getElementById("detailsDueDate").textContent =
+        formatDateTime(task.dueDate);
+
+
+    document.getElementById("detailsReminder").textContent =
+        task.reminder || "No reminder";
+
+
+    document
+        .getElementById("detailsModal")
+        .classList.add("show");
+
+}
+
+
+function closeDetailsModal() {
+
+    document
+        .getElementById("detailsModal")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   DATE FORMATTING
+========================================================= */
+
+function formatDateTime(dateTimeString) {
+
+    if (!dateTimeString) {
+        return "No deadline";
+    }
+
+
+    const date =
+        parseLocalDateTime(dateTimeString);
+
+
+    if (
+        !date ||
+        isNaN(date.getTime())
+    ) {
+        return "Invalid date";
+    }
+
+
+    return date.toLocaleString(
+        undefined,
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+function convertToDateTimeLocal(dateTimeString) {
+
+    if (!dateTimeString) {
+        return "";
+    }
+
+
+    if (
+        dateTimeString.length >= 16 &&
+        dateTimeString[10] === "T"
+    ) {
+        return dateTimeString.substring(0, 16);
+    }
+
+
+    const date =
+        new Date(dateTimeString);
+
+
+    if (isNaN(date.getTime())) {
+        return "";
+    }
+
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(date.getMonth() + 1).padStart(2, "0");
+
+    const day =
+        String(date.getDate()).padStart(2, "0");
+
+    const hours =
+        String(date.getHours()).padStart(2, "0");
+
+    const minutes =
+        String(date.getMinutes()).padStart(2, "0");
+
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+
+}
+
+
+/* =========================================================
+   REMINDER CHECKING
+========================================================= */
+
+function checkReminders() {
+
+    if (!tasks.length) {
+        return;
+    }
+
+
+    const now =
+        new Date();
+
+
+    tasks.forEach(function (task) {
+
+        if (task.status !== "done") {
+
+            const reminderTime =
+                getReminderTime(task);
+
+
+            if (reminderTime) {
 
                 const reminderKey =
                     `${task.id}-${reminderTime.getTime()}`;
 
 
-                /*
-                 * Already displayed.
-                 */
+                if (!triggeredReminders.has(reminderKey)) {
 
-                if (
-                    triggeredReminders
-                        .has(
+                    if (now >= reminderTime) {
+
+                        const difference =
+                            now.getTime() -
+                            reminderTime.getTime();
+
+
+                        if (difference <= 60 * 1000) {
+
+                            sendTaskAlert(
+                                task,
+                                "Task Reminder"
+                            );
+
+                        }
+
+
+                        triggeredReminders.add(
                             reminderKey
-                        )
-                ) {
-
-                    return;
-                }
-
-
-                /*
-                 * Reminder time has arrived.
-                 */
-
-                if (
-                    now >=
-                    reminderTime
-                ) {
-
-
-                    const difference =
-                        now.getTime() -
-                        reminderTime.getTime();
-
-
-                    /*
-                     * Only trigger within
-                     * one minute of the
-                     * reminder time.
-                     */
-
-                    if (
-                        difference <=
-                        60 * 1000
-                    ) {
-
-                        sendTaskAlert(
-                            task
                         );
 
                     }
 
-
-                    triggeredReminders
-                        .add(
-                            reminderKey
-                        );
-
                 }
 
             }
-        );
 
-    }
-
-
-    /*
-     * ==========================================
-     * PLAY REMINDER SOUND
-     * ==========================================
-     *
-     * No external audio file required.
-     *
-     * The browser generates a short
-     * two-tone notification sound.
-     */
-
-    function playReminderSound() {
+        }
 
 
-        try {
+        if (
+            task.status !== "done" &&
+            task.dueDate
+        ) {
+
+            const dueDate =
+                parseLocalDateTime(task.dueDate);
 
 
-            const AudioContext =
-                window.AudioContext ||
-                window.webkitAudioContext;
-
-
-            if (!AudioContext) {
-
+            if (!dueDate) {
                 return;
             }
 
 
-            const audioContext =
-                new AudioContext();
+            if (now >= dueDate) {
+
+                const overdueKey =
+                    `${task.id}-${task.dueDate}`;
 
 
-            /*
-             * First tone.
-             */
+                if (
+                    !triggeredOverdueAlerts.has(
+                        overdueKey
+                    )
+                ) {
 
-            const oscillator1 =
-                audioContext
-                    .createOscillator();
+                    sendTaskAlert(
+                        task,
+                        "Task Overdue"
+                    );
+
+                    triggeredOverdueAlerts.add(
+                        overdueKey
+                    );
+
+                }
+
+            }
+
+        }
+
+    });
 
 
-            const gain1 =
-                audioContext
-                    .createGain();
+    /* Refresh status tags/stats automatically
+       when a pending task becomes overdue. */
+    renderTasks();
+
+    updateStats(tasks);
+
+}
 
 
-            oscillator1.type =
-                "sine";
+/* =========================================================
+   ALERTS
+========================================================= */
+
+function sendTaskAlert(task, type) {
+
+    playReminderSound();
 
 
-            oscillator1.frequency.value =
-                880;
+    const alertTitle =
+        document.getElementById("alertTitle");
+
+    const alertTaskName =
+        document.getElementById("alertTaskName");
 
 
-            gain1.gain.setValueAtTime(
-                0.0001,
-                audioContext.currentTime
+    alertTitle.textContent =
+        type === "Task Overdue"
+            ? "⚠️ Task Overdue"
+            : "⏰ Task Reminder";
+
+
+    alertTaskName.textContent =
+        type === "Task Overdue"
+            ? `${task.title || "Untitled Task"} is overdue.`
+            : task.title || "Untitled Task";
+
+
+    document
+        .getElementById("taskAlert")
+        .classList.add("show");
+
+
+    document
+        .getElementById("alertOkButton")
+        .focus();
+
+
+    if (
+        notificationsEnabled &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+    ) {
+
+        try {
+
+            new Notification(
+                type === "Task Overdue"
+                    ? "⚠️ Task Overdue"
+                    : "⏰ Task Reminder",
+                {
+                    body:
+                        type === "Task Overdue"
+                            ? `${task.title || "Untitled Task"} is overdue.`
+                            : task.title || "Task reminder"
+                }
             );
 
+        }
 
-            gain1.gain.exponentialRampToValueAtTime(
-                0.35,
-                audioContext.currentTime + 0.02
-            );
-
-
-            gain1.gain.exponentialRampToValueAtTime(
-                0.0001,
-                audioContext.currentTime + 0.35
-            );
-
-
-            oscillator1.connect(
-                gain1
-            );
-
-
-            gain1.connect(
-                audioContext.destination
-            );
-
-
-            oscillator1.start();
-
-
-            oscillator1.stop(
-                audioContext.currentTime +
-                0.35
-            );
-
-
-            /*
-             * Second tone.
-             */
-
-            const oscillator2 =
-                audioContext
-                    .createOscillator();
-
-
-            const gain2 =
-                audioContext
-                    .createGain();
-
-
-            oscillator2.type =
-                "sine";
-
-
-            oscillator2.frequency.value =
-                660;
-
-
-            gain2.gain.setValueAtTime(
-                0.0001,
-                audioContext.currentTime +
-                0.35
-            );
-
-
-            gain2.gain.exponentialRampToValueAtTime(
-                0.35,
-                audioContext.currentTime +
-                0.38
-            );
-
-
-            gain2.gain.exponentialRampToValueAtTime(
-                0.0001,
-                audioContext.currentTime +
-                0.75
-            );
-
-
-            oscillator2.connect(
-                gain2
-            );
-
-
-            gain2.connect(
-                audioContext.destination
-            );
-
-
-            oscillator2.start(
-                audioContext.currentTime +
-                0.35
-            );
-
-
-            oscillator2.stop(
-                audioContext.currentTime +
-                0.75
-            );
-
-
-            /*
-             * Close audio context after
-             * the sound finishes.
-             */
-
-            setTimeout(
-                () => {
-
-                    audioContext.close();
-
-                },
-                1000
-            );
-
-
-        } catch (error) {
+        catch (error) {
 
             console.error(
-                "Unable to play reminder sound:",
+                "Notification error:",
                 error
             );
 
@@ -3221,392 +2091,251 @@
 
     }
 
+}
 
-    /*
-     * ==========================================
-     * SHOW TASK ALERT
-     * ==========================================
-     */
 
-    function sendTaskAlert(
-        task
-    ) {
-
-
-        /*
-         * Play audio first.
-         */
-
-        playReminderSound();
-
-
-        /*
-         * Put task name in alert body.
-         */
-
-        const alertTaskName =
-            document.getElementById(
-                "alertTaskName"
-            );
-
-
-        alertTaskName.textContent =
-            task.title ||
-            "Task Reminder";
-
-
-        /*
-         * Show alert.
-         */
-
-        const alert =
-            document.getElementById(
-                "taskAlert"
-            );
-
-
-        alert.classList.add(
-            "show"
-        );
-
-
-        /*
-         * Focus OK button.
-         */
-
-        document
-            .getElementById(
-                "alertOkButton"
-            )
-            .focus();
-
-    }
-
-
-    /*
-     * ==========================================
-     * CLOSE TASK ALERT
-     * ==========================================
-     */
-
-    function closeTaskAlert() {
-
-
-        document
-            .getElementById(
-                "taskAlert"
-            )
-            .classList
-            .remove("show");
-
-    }
-
-
-    /*
-     * ==========================================
-     * REMOVE TASK REMINDERS
-     * ==========================================
-     */
-
-    function removeTaskReminders(
-        id
-    ) {
-
-
-        for (
-            const key
-            of triggeredReminders
-        ) {
-
-
-            if (
-                key.startsWith(
-                    `${id}-`
-                )
-            ) {
-
-                triggeredReminders
-                    .delete(key);
-
-            }
-
-        }
-
-    }
-
-
-    /*
-     * ==========================================
-     * FORMAT DATE/TIME
-     * ==========================================
-     */
-
-    function formatDateTime(
-        dateTimeString
-    ) {
-
-
-        if (!dateTimeString) {
-
-            return "No deadline";
-        }
-
-
-        const date =
-            parseLocalDateTime(
-                dateTimeString
-            );
-
-
-        if (
-            !date ||
-            isNaN(date.getTime())
-        ) {
-
-            return "Invalid date";
-        }
-
-
-        return date.toLocaleString(
-            undefined,
-            {
-
-                year: "numeric",
-
-                month: "short",
-
-                day: "numeric",
-
-                hour: "numeric",
-
-                minute: "2-digit"
-
-            }
-        );
-
-    }
-
-
-    /*
-     * ==========================================
-     * CONVERT TO DATETIME-LOCAL
-     * ==========================================
-     */
-
-    function convertToDateTimeLocal(
-        dateTimeString
-    ) {
-
-
-        if (!dateTimeString) {
-            return "";
-        }
-
-
-        /*
-         * Backend format:
-         *
-         * 2026-09-15T18:30
-         */
-
-        if (
-            dateTimeString.length >= 16 &&
-            dateTimeString[10] === "T"
-        ) {
-
-            return dateTimeString
-                .substring(0, 16);
-        }
-
-
-        const date =
-            new Date(
-                dateTimeString
-            );
-
-
-        if (
-            isNaN(
-                date.getTime()
-            )
-        ) {
-
-            return "";
-        }
-
-
-        const year =
-            date.getFullYear();
-
-
-        const month =
-            String(
-                date.getMonth() + 1
-            )
-            .padStart(2, "0");
-
-
-        const day =
-            String(
-                date.getDate()
-            )
-            .padStart(2, "0");
-
-
-        const hours =
-            String(
-                date.getHours()
-            )
-            .padStart(2, "0");
-
-
-        const minutes =
-            String(
-                date.getMinutes()
-            )
-            .padStart(2, "0");
-
-
-        return (
-            `${year}-${month}-${day}` +
-            `T${hours}:${minutes}`
-        );
-
-    }
-
-
-    /*
-     * ==========================================
-     * ESCAPE HTML
-     * ==========================================
-     */
-
-    function escapeHtml(
-        value
-    ) {
-
-
-        if (
-            value === null ||
-            value === undefined
-        ) {
-
-            return "";
-        }
-
-
-        return String(value)
-
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-
-            .replace(
-                /</g,
-                "&lt;"
-            )
-
-            .replace(
-                />/g,
-                "&gt;"
-            )
-
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-    }
-
-
-    /*
-     * ==========================================
-     * EDIT MODAL OUTSIDE CLICK
-     * ==========================================
-     */
+function closeTaskAlert() {
 
     document
-        .getElementById(
-            "editModal"
-        )
-        .addEventListener(
-            "click",
-            function(event) {
+        .getElementById("taskAlert")
+        .classList.remove("show");
+
+}
 
 
-                if (
-                    event.target ===
-                    this
-                ) {
+/* =========================================================
+   SOUND
+========================================================= */
 
-                    closeEditModal();
+function playReminderSound() {
 
-                }
+    try {
 
-            }
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+            return;
+        }
+
+
+        const audioContext =
+            new AudioContext();
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.type = "sine";
+
+        oscillator.frequency.value = 880;
+
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            audioContext.currentTime
         );
 
 
-    /*
-     * ==========================================
-     * KEYBOARD CONTROL
-     * ==========================================
-     *
-     * ENTER or ESC closes the alert.
-     */
-
-    document.addEventListener(
-        "keydown",
-        function(event) {
+        gain.gain.exponentialRampToValueAtTime(
+            0.25,
+            audioContext.currentTime + 0.02
+        );
 
 
-            const alert =
-                document.getElementById(
-                    "taskAlert"
-                );
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioContext.currentTime + 0.35
+        );
 
 
-            if (
-                alert.classList.contains(
-                    "show"
-                )
-            ) {
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
 
 
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
+        oscillator.start();
 
-                    closeTaskAlert();
+        oscillator.stop(
+            audioContext.currentTime + 0.35
+        );
 
-                }
+    }
+
+    catch (error) {
+
+        console.error(
+            "Reminder sound error:",
+            error
+        );
+
+    }
+
+}
 
 
-                if (
-                    event.key ===
-                    "Escape"
-                ) {
+/* =========================================================
+   REMOVE TRIGGERED KEYS
+========================================================= */
 
-                    closeTaskAlert();
+function removeTaskReminders(id) {
 
-                }
+    for (const key of triggeredReminders) {
 
-            }
+        if (key.startsWith(`${id}-`)) {
+
+            triggeredReminders.delete(key);
 
         }
-    );
+
+    }
+
+}
+
+
+function removeTaskOverdueAlerts(id) {
+
+    for (const key of triggeredOverdueAlerts) {
+
+        if (key.startsWith(`${id}-`)) {
+
+            triggeredOverdueAlerts.delete(key);
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   HTML / JS ESCAPING
+========================================================= */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function escapeJs(value) {
+
+    return String(value)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r");
+
+}
+
+
+/* =========================================================
+   MODAL CLICK OUTSIDE
+========================================================= */
+
+document
+    .getElementById("editModal")
+    .addEventListener("click", function (event) {
+
+        if (event.target === this) {
+            closeEditModal();
+        }
+
+    });
+
+
+document
+    .getElementById("detailsModal")
+    .addEventListener("click", function (event) {
+
+        if (event.target === this) {
+            closeDetailsModal();
+        }
+
+    });
+
+
+document
+    .getElementById("taskAlert")
+    .addEventListener("click", function (event) {
+
+        if (event.target === this) {
+            closeTaskAlert();
+        }
+
+    });
+
+
+/* =========================================================
+   KEYBOARD CONTROLS
+========================================================= */
+
+document.addEventListener("keydown", function (event) {
+
+    if (event.key !== "Escape") {
+        return;
+    }
+
+
+    const alert =
+        document.getElementById("taskAlert");
+
+    const detailsModal =
+        document.getElementById("detailsModal");
+
+    const editModal =
+        document.getElementById("editModal");
+
+
+    if (alert.classList.contains("show")) {
+
+        closeTaskAlert();
+
+        return;
+    }
+
+
+    if (detailsModal.classList.contains("show")) {
+
+        closeDetailsModal();
+
+        return;
+    }
+
+
+    if (editModal.classList.contains("show")) {
+
+        closeEditModal();
+
+    }
+
+});
 
 
 </script>
 
-
 </body>
-
 </html>
