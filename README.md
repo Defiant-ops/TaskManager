@@ -1,93 +1,117 @@
-# Forge
+# Forge — Cloud Task Manager
 
-## Task Management REST API
+`https://forge-8src.onrender.com`
 
-A lightweight task management application built with **Python**, **Flask**, **MongoDB Atlas**, and a simple **HTML/CSS/JavaScript frontend**.
-
-The application provides a RESTful API for managing personal tasks and includes Google authentication, task filtering, reminders, and a responsive dashboard.
+A full-stack task management web application built with **Flask**, **MongoDB Atlas**, and **Google OAuth 2.0**, deployed on **Render**.
 
 ---
 
 ## Features
 
-### Task Management
-
-- **Create Task (`POST`)**: Add a new task with title, description, due date, reminder, and status.
-- **Read All Tasks (`GET`)**: Retrieve all tasks belonging to the logged-in user.
-- **Read Task by ID (`GET`)**: Retrieve a single task by its MongoDB `ObjectId`.
-- **Update Task (`PUT`)**: Modify an existing task.
-- **Delete Task (`DELETE`)**: Remove a task by its ID.
-- **Task Status**: Tasks can be marked as pending or completed.
-- **Overdue Detection**: Pending tasks automatically appear as overdue after their due date.
-
-### Authentication
-
-- Google OAuth 2.0 login.
-- User sessions using Flask sessions.
-- Each user's tasks are isolated using their Google account email.
-- Logout functionality.
-
-### Dashboard
-
-- Total task count.
-- Pending task count.
-- Completed task count.
-- Overdue task count.
-- Search tasks by title or description.
-- Filter tasks by:
-  - All
-  - Pending
-  - Completed
-  - Overdue
-- Click a task to view its details.
-- Edit and delete tasks directly from the dashboard.
-
-### Reminders & Notifications
-
-- Task reminder date and time.
-- Browser notification support.
-- Custom task reminder alerts.
-- Sound notification support.
-- Automatic overdue alerts.
-- Reminder checking while the application is open.
+- **Google OAuth Authentication:** Secure single sign-on using Google accounts via Authlib.
+- **Task Management (CRUD):** Create, search, filter, and track tasks (Pending, Completed, Overdue).
+- **Persistent Storage:** Cloud-hosted MongoDB cluster for reliable document storage.
+- **Dynamic Timezone & Reminders:** Handles local client deadlines, timestamps, and notification preferences.
+- **Production-Ready WSGI:** Served via Gunicorn with dynamic HTTPS reverse-proxy support.
 
 ---
 
 ## Tech Stack
 
-- **Backend**: Python
-- **Framework**: Flask
-- **Database**: MongoDB Atlas
-- **Database Driver**: Flask-PyMongo / PyMongo
-- **Authentication**: Google OAuth 2.0 using Authlib
-- **Environment Management**: python-dotenv
-- **Frontend**: HTML, CSS, JavaScript
-- **Server**: Flask development server / Gunicorn for later deployment
-
----
-
-## Prerequisites
-
-Before running the application, make sure you have:
-
-- [Python 3.10+](https://www.python.org/downloads/)
-- A free [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster
-- A MongoDB Atlas database user
-- A Google Cloud project with Google OAuth credentials
+- **Backend:** Python 3, Flask, Werkzeug, Jinja2
+- **Database:** MongoDB Atlas (via `Flask-PyMongo` & `pymongo`)
+- **Authentication:** Authlib, Google OAuth 2.0
+- **Server / Deployment:** Gunicorn, Render
 
 ---
 
 ## Project Structure
 
 ```text
-Task-Manager/
-│
-├── app.py
-├── requirements.txt
-├── .env
-├── .gitignore
-├── README.md
-│
-└── static/
-    ├── index.html
-    └── style.css
+├── static/              # CSS styles, client-side JS, images
+├── templates/           # Jinja2 HTML templates
+├── app.py               # Main Flask application and API routes
+├── requirements.txt     # Python project dependencies
+└── README.md            # Project documentation
+```
+
+---
+
+## Getting Started Locally
+
+### Prerequisites
+
+- Python 3.10+ installed
+- A [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) account and cluster
+- A [Google Cloud Console](https://console.cloud.google.com/) project with OAuth 2.0 credentials
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Defiant-ops/Forge.git
+cd Forge
+```
+
+### 2. Create and Activate Virtual Environment
+
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# macOS / Linux
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env` file in the root directory (ensure it is added to `.gitignore`):
+
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/task_manager?retryWrites=true&w=majority
+SECRET_KEY=your-super-secret-key
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
+
+### 5. Run the Application
+
+```bash
+python app.py
+```
+
+Visit `http://127.0.0.1:5000` in your web browser.
+
+---
+
+## Deployment (Render)
+
+### 1. Web Service Setup
+- **Runtime:** `Python 3`
+- **Build Command:** `pip install -r requirements.txt`
+- **Start Command:** `gunicorn app:app`
+
+### 2. Environment Variables
+Add the following keys in your Render service dashboard under **Environment**:
+- `MONGO_URI`: Your MongoDB Atlas connection string
+- `SECRET_KEY`: A cryptographically secure random key
+- `GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
+- `GOOGLE_CLIENT_SECRET`: Your Google OAuth Client Secret
+
+### 3. Google OAuth Redirects
+In your Google Cloud Console OAuth 2.0 Client credentials, register:
+- **Authorized JavaScript origins:** `https://forge-8src.onrender.com`
+- **Authorized redirect URIs:** `https://forge-8src.onrender.com/authorize`
+
+---
+
+## License
+
+This project is open-source and available under the [MIT License](LICENSE).
