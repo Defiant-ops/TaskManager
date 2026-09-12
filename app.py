@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, jsonify, send_from_directory, session
+from flask import Flask, redirect, request, jsonify, send_from_directory, session, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask.cli import load_dotenv
@@ -34,9 +34,9 @@ google = oauth.register(
 
 @app.route("/login")
 def login():
-    return google.authorize_redirect(
-        redirect_uri="http://127.0.0.1:5000/authorize"
-    )
+    scheme = "https" if request.headers.get("X-Forwarded-Proto") == "https" else "http"
+    redirect_uri = url_for("authorize", _external=True, _scheme=scheme)
+    return google.authorize_redirect(redirect_uri=redirect_uri)
 
 
 @app.route("/authorize")
