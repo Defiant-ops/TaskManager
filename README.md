@@ -1,6 +1,6 @@
 # Forge — Cloud Task Manager
 
-https://www.forge-8src.onrender.com
+https://forge-8src.onrender.com
 
 A full-stack task management web application built with **Flask**, **MongoDB Atlas**, and **Google OAuth 2.0**, deployed on **Render**.
 
